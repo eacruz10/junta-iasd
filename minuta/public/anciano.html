@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Ancianos - Junta Directiva IASD</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased">
+
+    <!-- Encabezado del Anciano -->
+    <header class="bg-blue-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">👔</span>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight">Supervisión de Ancianos</h1>
+                    <p class="text-xs text-blue-200">Revisión y Filtro Pre-Junta</p>
+                </div>
+            </div>
+            <div class="text-right text-xs">
+                <span class="bg-blue-800 text-blue-100 px-2.5 py-1 rounded-full font-semibold border border-blue-700">
+                    Rol: Anciano
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- RESUMEN DE DEPARTAMENTOS ASIGNADOS -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tus Departamentos a Cargo</h2>
+                    <p class="text-sm font-semibold text-slate-800 mt-0.5">Ministerio de la Salud • Jóvenes (JA)</p>
+                </div>
+                <span class="text-xs bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-100">
+                    2 Puntos Pendientes
+                </span>
+            </div>
+        </section>
+
+        <!-- LISTA DE PUNTOS POR REVISAR -->
+        <section>
+            <h2 class="font-bold text-slate-800 text-base mb-3 flex items-center space-x-2">
+                <span>📑 Propuestas por Revisar</span>
+            </h2>
+
+            <div class="space-y-4" id="contenedor-puntos-anciano">
+
+                <!-- TARJETA DE PUNTO PENDIENTE DE REVISIÓN -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4" id="tarjeta-punto-1">
+                    
+                    <!-- Encabezado de la propuesta -->
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="text-[11px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded uppercase">Ministerio de la Salud</span>
+                            <h3 class="font-bold text-slate-900 text-lg mt-1">Feria de Salud Comunitaria</h3>
+                            <p class="text-xs text-slate-500">Solicitado por: Ana Martínez (Directora)</p>
+                        </div>
+                        <span class="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                            Pendiente Filtro
+                        </span>
+                    </div>
+
+                    <!-- Detalle de la propuesta -->
+                    <div class="text-xs text-slate-600 space-y-2">
+                        <p class="bg-slate-50 p-3 rounded-lg border border-slate-100 leading-relaxed text-slate-700">
+                            Se propone realizar una brigada médica en las instalaciones de la iglesia con atención en fisioterapia y medicina general para la comunidad.
+                        </p>
+                        <div class="flex items-center justify-between text-slate-500 pt-1">
+                            <span>Presupuesto Estimado: <strong class="text-slate-800">$1,000.00 MXN</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Campo Opcional para Observaciones/Motivo de Rechazo -->
+                    <div class="pt-2">
+                        <label for="nota-1" class="block text-[11px] font-bold text-slate-500 uppercase mb-1">
+                            Observaciones / Instrucción al Directivo (Opcional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nota-1" 
+                            placeholder="Ej. Cambiar la fecha porque coincide con el retiro de zona..." 
+                            class="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        >
+                    </div>
+
+                    <!-- BOTONES DE ACCIÓN RÁPIDA -->
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button 
+                            type="button" 
+                            onclick="responderPunto(1, 'Rechazado_Por_Anciano')"
+                            class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-2.5 px-3 rounded-lg border border-rose-200 text-xs transition flex items-center justify-center space-x-1"
+                        >
+                            <span>✕ Rechazar / Corregir</span>
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="responderPunto(1, 'Aprobado_Por_Anciano')"
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-lg text-xs shadow-sm transition flex items-center justify-center space-x-1"
+                        >
+                            <span>✓ Pre-Aprobar para Junta</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script de Conexión con la API Backend (Node.js) -->
+    <script>
+        // Función para enviar la decisión del Anciano al Servidor
+        async function responderPunto(idPunto, nuevoEstado) {
+            const nota = document.getElementById(`nota-${idPunto}`).value;
+
+            if (nuevoEstado === 'Rechazado_Por_Anciano' && !nota.trim()) {
+                alert("Por favor escribe una observación explicando el motivo del rechazo al directivo.");
+                return;
+            }
+
+            const payload = {
+                estado: nuevoEstado,
+                motivo_rechazo: nota || null
+            };
+
+            try {
+                // Petición al Endpoint PATCH desarrollado en Node.js
+                const response = await fetch(`http://localhost:3000/api/puntos/${idPunto}/revision-anciano`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (nuevoEstado === 'Aprobado_Por_Anciano') {
+                        alert("✅ Punto pre-aprobado exitosamente. Ahora es visible en la consola de la Secretaria.");
+                    } else {
+                        alert("⚠️ Punto devuelto al directivo con tus observaciones.");
+                    }
+                    
+                    // Ocultar la tarjeta procesada
+                    document.getElementById(`tarjeta-punto-${idPunto}`).remove();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+                alert("Ocurrió un error al intentar comunicar con el servidor.");
+            }
+        }
+    </script>
+</body>
+</html>

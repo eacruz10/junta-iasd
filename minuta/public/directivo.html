@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Someter Punto - Directivo IASD</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased">
+
+    <!-- Encabezado del Directivo -->
+    <header class="bg-teal-800 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-2xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">📢</span>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight">Portal de Directivos</h1>
+                    <p class="text-xs text-teal-200">Envío de Puntos a la Junta Directiva</p>
+                </div>
+            </div>
+            <div class="text-right text-xs">
+                <span class="bg-teal-700 text-teal-100 px-2.5 py-1 rounded-full font-semibold border border-teal-600">
+                    Rol: Directivo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- FORMULARIO PARA REGISTRAR NUEVO PUNTO -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div class="border-b border-slate-100 pb-3">
+                <h2 class="font-bold text-slate-800 text-base">Proponer Nuevo Punto para la Junta</h2>
+                <p class="text-xs text-slate-500 mt-0.5">El punto se enviará primero a tu Anciano supervisor para su revisión previa.</p>
+            </div>
+
+            <form id="form-crear-punto" class="space-y-4">
+                
+                <!-- Selección de Departamento -->
+                <div>
+                    <label for="id_departamento" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Tu Departamento
+                    </label>
+                    <select 
+                        id="id_departamento" 
+                        required
+                        class="w-full text-sm p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none bg-white font-medium text-slate-800"
+                    >
+                        <option value="1">Ministerio de la Salud</option>
+                        <option value="2">Jóvenes / Clubes (JA)</option>
+                        <option value="3">Escuela Sabática</option>
+                        <option value="4">Pro-Templo / Mantenimiento</option>
+                    </select>
+                </div>
+
+                <!-- Título del Punto -->
+                <div>
+                    <label for="titulo_punto" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Título Breve de la Propuesta
+                    </label>
+                    <input 
+                        type="text" 
+                        id="titulo_punto" 
+                        required
+                        placeholder="Ej. Feria de Salud Comunitaria, Campamento de Jóvenes..." 
+                        class="w-full text-sm p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none"
+                    >
+                </div>
+
+                <!-- Descripción detallada / Justificación -->
+                <div>
+                    <label for="descripcion_inicial" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Descripción e Idea General
+                    </label>
+                    <textarea 
+                        id="descripcion_inicial" 
+                        rows="4" 
+                        required
+                        placeholder="Explica qué quieres hacer, por qué es necesario y los detalles principales de la actividad..."
+                        class="w-full text-sm p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none"
+                    ></textarea>
+                </div>
+
+                <!-- Presupuesto Estimado (Opcional) -->
+                <div class="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                    <label for="presupuesto_estimado" class="block text-xs font-bold text-teal-900 uppercase tracking-wider mb-1">
+                        Presupuesto Estimado Solicitado (MXN)
+                    </label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <span class="text-slate-500 sm:text-sm">$</span>
+                        </div>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            id="presupuesto_estimado" 
+                            class="w-full rounded-md border border-teal-300 pl-7 pr-12 py-2 text-sm focus:border-teal-500 focus:ring-teal-500 font-semibold text-slate-900 outline-none" 
+                            placeholder="0.00"
+                        >
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <span class="text-xs text-slate-500">MXN</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-teal-700 mt-1">Si la actividad no requiere fondos económicos, puedes dejarlo en $0.00.</p>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button 
+                    type="button" 
+                    onclick="enviarPunto()"
+                    class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition flex items-center justify-center space-x-2"
+                >
+                    <span>🚀 Enviar Punto a Revisión de Anciano</span>
+                </button>
+
+            </form>
+        </section>
+
+        <!-- SECCIÓN DE SEGUIMIENTO (MIS PUNTOS ENVIADOS) -->
+        <section class="space-y-3">
+            <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Estatus de tus Puntos Enviados</h3>
+
+            <!-- Punto Enviado (Ejemplo de Respuesta) -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2">
+                <div class="flex justify-between items-start">
+                    <h4 class="font-bold text-slate-900 text-sm">Feria de Salud Comunitaria</h4>
+                    <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                        En Revisión por Anciano
+                    </span>
+                </div>
+                <p class="text-xs text-slate-600 line-clamp-2">
+                    Se propone realizar una brigada médica en las instalaciones de la iglesia con atención en fisioterapia...
+                </p>
+                <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-100 flex justify-between">
+                    <span>Enviado: Hoy</span>
+                    <span>Presupuesto: $1,000.00 MXN</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Script de Integración con la API Backend (Node.js) -->
+    <script>
+        async function enviarPunto() {
+            const idDepartamento = document.getElementById('id_departamento').value;
+            const titulo = document.getElementById('titulo_punto').value;
+            const descripcion = document.getElementById('descripcion_inicial').value;
+            const presupuesto = document.getElementById('presupuesto_estimado').value;
+
+            if (!titulo.trim() || !descripcion.trim()) {
+                alert("Por favor completa el título y la descripción de la propuesta.");
+                return;
+            }
+
+            const payload = {
+                id_junta: 1, // ID de la junta activa del mes
+                id_departamento: parseInt(idDepartamento),
+                id_creador: 4, // ID del usuario logueado (Directivo)
+                titulo_punto: titulo,
+                descripcion_inicial: descripcion,
+                presupuesto_estimado: parseFloat(presupuesto) || 0.00
+            };
+
+            try {
+                // Petición al Endpoint POST /api/puntos construido en Node.js
+                const response = await fetch('http://localhost:3000/api/puntos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("✅ " + data.mensaje);
+                    // Limpiar el formulario
+                    document.getElementById('titulo_punto').value = '';
+                    document.getElementById('descripcion_inicial').value = '';
+                    document.getElementById('presupuesto_estimado').value = '';
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+                alert("Ocurrió un error al enviar el punto al servidor.");
+            }
+        }
+    </script>
+</body>
+</html>
